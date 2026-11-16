@@ -1,124 +1,74 @@
-import { motion } from 'framer-motion';
-import { Heart, ArrowUp } from 'lucide-react';
-import { personalInfo } from '@/data/portfolio';
+import { ArrowUp, Github, Linkedin, Mail, Phone, Heart } from "lucide-react";
+import { personalInfo } from "@/data/portfolio";
+import { soundFx } from "@/lib/sound";
 
-const Footer = () => {
+export const Footer = () => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    soundFx.playClick();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const currentYear = new Date().getFullYear();
-
-  const footerLinks = [
-    { label: 'Home', href: '#hero' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Experience', href: '#experience' },
-    { label: 'Contact', href: '#contact' },
-  ];
-
   return (
-    <footer className="relative py-16 overflow-hidden">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background to-transparent" />
-      
-      <div className="container mx-auto px-6 relative">
-        {/* Top Section */}
-        <div className="glass rounded-3xl p-8 md:p-12 mb-12">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Brand */}
-            <div className="lg:col-span-2">
-              <motion.h3
-                className="text-2xl font-bold gradient-text mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                {personalInfo.name}
-              </motion.h3>
-              <p className="text-muted-foreground mb-6 max-w-md">
-                Crafting digital experiences with passion and precision. 
-                Let's build something amazing together.
-              </p>
-              <a
-                href={`mailto:${personalInfo.email}`}
-                className="text-primary hover:underline font-medium"
-              >
-                {personalInfo.email}
-              </a>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                {footerLinks.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Connect */}
-            <div>
-              <h4 className="font-semibold mb-4">Connect</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a
-                    href={personalInfo.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={personalInfo.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={`mailto:${personalInfo.email}`}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    Email
-                  </a>
-                </li>
-              </ul>
-            </div>
+    <footer className="border-t hairline bg-background py-12">
+      <div className="section-wrap flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="w-6 h-6 rounded bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-[10px] text-primary">
+              AO
+            </span>
+            <span className="font-bold tracking-tight text-foreground text-sm">
+              {personalInfo.name}
+            </span>
+            <span className="text-xs text-muted-foreground">· Software Engineer</span>
           </div>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-muted-foreground text-sm flex items-center gap-1">
-            © {currentYear} {personalInfo.name}.{' '}
-             made by Ahmed
+          <p className="mt-2 text-xs text-muted-foreground max-w-sm leading-relaxed">
+            Architecting reliable full-stack applications, municipal public platforms, and real-time systems.
           </p>
-
-          <motion.button
-            onClick={scrollToTop}
-            className="p-3 rounded-full glass hover:glow-sm transition-all duration-300"
-            whileHover={{ y: -5 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label="Scroll to top"
-          >
-            <ArrowUp className="w-5 h-5 text-primary" />
-          </motion.button>
         </div>
+
+        {/* Social and Action Links */}
+        <div className="flex flex-wrap items-center gap-4">
+          <a
+            href={personalInfo.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub profile"
+            className="p-2 rounded-md border border-border bg-card/60 hover:border-primary text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Github className="h-4 w-4" />
+          </a>
+          <a
+            href={personalInfo.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
+            className="p-2 rounded-md border border-border bg-card/60 hover:border-primary text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Linkedin className="h-4 w-4" />
+          </a>
+          <a
+            href={`mailto:${personalInfo.email}`}
+            aria-label="Email Ahmed"
+            className="p-2 rounded-md border border-border bg-card/60 hover:border-primary text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Mail className="h-4 w-4" />
+          </a>
+          <button
+            onClick={scrollToTop}
+            aria-label="Back to top"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-border bg-card text-xs font-semibold hover:border-primary hover:text-primary transition-colors"
+          >
+            <span>Top</span>
+            <ArrowUp className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      </div>
+
+      <div className="section-wrap mt-8 pt-6 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground gap-2">
+        <p>© {new Date().getFullYear()} {personalInfo.name}. Standardized for global software engineering excellence.</p>
+        <p className="flex items-center gap-1">
+          Engineered with React, TypeScript & Three.js
+        </p>
       </div>
     </footer>
   );

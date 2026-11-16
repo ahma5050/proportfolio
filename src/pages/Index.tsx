@@ -1,79 +1,34 @@
-import { lazy, Suspense } from 'react';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
-import Hero from '@/components/sections/Hero';
-import LoadingScreen from '@/components/ui/LoadingScreen';
-import CustomCursor from '@/components/ui/CustomCursor';
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import Hero from "@/components/sections/Hero";
+import StatsOverview from "@/components/sections/StatsOverview";
+import Projects from "@/components/sections/Projects";
+import ArchitectureVisualizer from "@/components/sections/ArchitectureVisualizer";
+import Skills from "@/components/sections/Skills";
+import InteractiveTerminal from "@/components/sections/InteractiveTerminal";
+import Timeline from "@/components/sections/Timeline";
+import Contact from "@/components/sections/Contact";
 
-// Lazy load heavy components
-const Scene3D = lazy(() => import('@/components/3d/Scene3D'));
-const Projects = lazy(() => import('@/components/sections/Projects'));
-const Skills = lazy(() => import('@/components/sections/Skills'));
-const Timeline = lazy(() => import('@/components/sections/Timeline'));
-const Contact = lazy(() => import('@/components/sections/Contact'));
-const Blog = lazy(() => import('@/components/sections/Blog'));
-
-const Index = () => {
-  return (
-    <>
-      <LoadingScreen />
-      <CustomCursor />
-      
-      {/* 3D Background */}
-      <Suspense fallback={null}>
-        <Scene3D />
-      </Suspense>
-
-      {/* Noise overlay for texture */}
-      <div className="noise-overlay" />
-      
-      {/* Main content */}
-      <div className="relative z-10">
-        <Navbar />
-        
-        <main>
-          <Hero />
-          
-          <Suspense fallback={<SectionSkeleton />}>
-            <Projects />
-          </Suspense>
-          
-          <Suspense fallback={<SectionSkeleton />}>
-            <Skills />
-          </Suspense>
-          
-          <Suspense fallback={<SectionSkeleton />}>
-            <Timeline />
-          </Suspense>
-          
-          <Suspense fallback={<SectionSkeleton />}>
-            <Blog />
-          </Suspense>
-          
-          <Suspense fallback={<SectionSkeleton />}>
-            <Contact />
-          </Suspense>
-        </main>
-        
-        <Footer />
-      </div>
-    </>
-  );
-};
-
-// Shimmer skeleton for lazy loaded sections
-const SectionSkeleton = () => (
-  <div className="py-32 container mx-auto px-6">
-    <div className="text-center mb-16">
-      <div className="w-32 h-8 mx-auto rounded-full shimmer mb-4" />
-      <div className="w-64 h-12 mx-auto rounded-lg shimmer mb-4" />
-      <div className="w-96 h-6 mx-auto rounded-lg shimmer" />
-    </div>
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {[...Array(6)].map((_, i) => (
-        <div key={i} className="h-80 rounded-2xl shimmer" />
-      ))}
-    </div>
+const Index = () => (
+  <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/20 selection:text-primary">
+    <a
+      className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 px-4 py-2 bg-primary text-primary-foreground rounded-md font-semibold"
+      href="#main-content"
+    >
+      Skip to content
+    </a>
+    <Navbar />
+    <main id="main-content">
+      <Hero />
+      <StatsOverview />
+      <Projects />
+      <ArchitectureVisualizer />
+      <Skills />
+      <InteractiveTerminal />
+      <Timeline />
+      <Contact />
+    </main>
+    <Footer />
   </div>
 );
 

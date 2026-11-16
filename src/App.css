@@ -1,42 +1,83 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  min-height: 100vh;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.section-wrap {
+  width: min(1120px, calc(100% - 48px));
+  margin-inline: auto;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.section-space {
+  padding-block: 112px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: hsl(var(--primary));
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  width: 20px;
+  height: 1px;
+  background: currentColor;
+  content: "";
+}
+
+.display-heading {
+  font-size: clamp(2.8rem, 7vw, 5.85rem);
+  letter-spacing: -0.07em;
+  line-height: 1.02;
+}
+
+.editorial-heading {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  letter-spacing: -0.065em;
+  line-height: 1.08;
+}
+
+.hairline {
+  border-color: hsl(var(--border));
+}
+
+.skip-link {
+  position: absolute;
+  z-index: 100;
+  top: 12px;
+  left: 12px;
+  transform: translateY(-160%);
+  border-radius: 6px;
+  background: hsl(var(--foreground));
+  padding: 10px 16px;
+  color: hsl(var(--background));
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .section-wrap {
+    width: min(100% - 36px, 1120px);
   }
-  to {
-    transform: rotate(360deg);
+
+  .section-space {
+    padding-block: 76px;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

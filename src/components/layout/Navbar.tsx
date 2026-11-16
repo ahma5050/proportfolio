@@ -1,131 +1,184 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sun, Moon, Sparkles, Flame } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useState } from "react";
+import { Command, Menu, Moon, Sun, Volume2, VolumeX, X } from "lucide-react";
+import { personalInfo } from "@/data/portfolio";
+import { useTheme } from "@/contexts/ThemeContext";
+import { soundFx } from "@/lib/sound";
+import CommandPalette from "@/components/ui/CommandPalette";
 
 const navLinks = [
-  { href: '#hero', label: 'Home' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#about', label: 'About' },
-  { href: '#contact', label: 'Contact' },
+  { href: "#projects", label: "Work" },
+  { href: "#architecture", label: "Architecture" },
+  { href: "#skills", label: "Skills" },
+  { href: "#terminal", label: "Terminal" },
+  { href: "#experience", label: "Experience" },
+  { href: "#contact", label: "Contact" },
 ];
 
-const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { theme, toggleTheme, isGold } = useTheme();
+export const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(soundFx.isEnabled());
+  const { toggleTheme, isGold } = useTheme();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const closeMenu = () => setIsMenuOpen(false);
+
+  const toggleSound = () => {
+    const newState = soundFx.toggle();
+    setSoundEnabled(newState);
+  };
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? 'glass py-3' : 'py-6'
-      }`}
-    >
-      <nav className="container mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
-        <motion.a
-          href="#hero"
-          className="flex items-center gap-1 text-2xl font-bold gradient-text"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+    <>
+      <header className="sticky top-0 z-40 border-b hairline bg-background/80 backdrop-blur-xl">
+        <nav
+          aria-label="Main navigation"
+          className="section-wrap flex min-h-[68px] items-center justify-between gap-4"
         >
-            <Flame className="w-6 h-6 text-primary" />
-          <span>AO</span>
-        </motion.a>
-
-        {/* Desktop Navigation */}
-        <ul className="hidden md:flex items-center gap-8">
-          {navLinks.map((link, index) => (
-            <motion.li
-              key={link.href}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <a
-                href={link.href}
-                className="relative text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-              </a>
-            </motion.li>
-          ))}
-        </ul>
-
-        {/* Theme Toggle & Mobile Menu Button */}
-        <div className="flex items-center gap-4">
-          <motion.button
-            onClick={toggleTheme}
-            className="p-2 rounded-full glass hover:glow-sm transition-all duration-300"
-            whileHover={{ scale: 1.1, rotate: 180 }}
-            whileTap={{ scale: 0.9 }}
-            aria-label="Toggle theme"
+          {/* Logo */}
+          <a
+            href="#home"
+            onClick={() => {
+              soundFx.playClick();
+              closeMenu();
+            }}
+            aria-label={`${personalInfo.name}, home`}
+            className="flex items-center gap-2.5 group"
           >
-            {isGold ? (
-              <Sun className="w-5 h-5 text-primary" />
-            ) : (
-              <Moon className="w-5 h-5 text-primary" />
-            )}
-          </motion.button>
+            <span className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-xs text-primary group-hover:bg-primary group-hover:text-primary-foreground shadow-sm transition-all">
+              AO
+            </span>
+            <span className="text-base font-bold tracking-tight text-foreground">
+              AHMED<span className="text-primary">.OMER</span>
+            </span>
+          </a>
 
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg glass"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass mt-2 mx-4 rounded-2xl overflow-hidden"
-          >
-            <ul className="py-4">
-              {navLinks.map((link, index) => (
-                <motion.li
-                  key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
+          {/* Nav Links Desktop */}
+          <div className="flex items-center gap-3">
+            <ul className="hidden items-center gap-6 md:flex">
+              {navLinks.map((link) => (
+                <li key={link.href}>
                   <a
                     href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-6 py-3 text-lg font-medium hover:text-primary transition-colors"
+                    onMouseEnter={() => soundFx.playHover()}
+                    onClick={() => soundFx.playClick()}
+                    className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.label}
                   </a>
-                </motion.li>
+                </li>
               ))}
             </ul>
-          </motion.div>
+
+            {/* Command Palette Trigger */}
+            <button
+              type="button"
+              onClick={() => {
+                soundFx.playClick();
+                setPaletteOpen(true);
+              }}
+              className="hidden lg:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground rounded-lg border border-border/80 bg-card/60 backdrop-blur-md hover:text-foreground hover:border-primary/50 transition-all shadow-sm"
+              title="Open Command Palette (Cmd + K)"
+            >
+              <Command className="h-3 w-3 text-primary" />
+              <span className="text-[11px] font-mono">⌘K</span>
+            </button>
+
+            {/* Sound FX Toggle */}
+            <button
+              type="button"
+              onClick={toggleSound}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 hover:border-border transition-colors hover:bg-secondary/70 backdrop-blur-sm text-muted-foreground hover:text-foreground"
+              aria-label={soundEnabled ? "Mute sound effects" : "Enable sound effects"}
+              title={soundEnabled ? "Sound: On" : "Sound: Off"}
+            >
+              {soundEnabled ? (
+                <Volume2 aria-hidden="true" className="h-4 w-4 text-emerald-500" />
+              ) : (
+                <VolumeX aria-hidden="true" className="h-4 w-4 opacity-60" />
+              )}
+            </button>
+
+            {/* Theme Toggle */}
+            <button
+              type="button"
+              onClick={() => {
+                soundFx.playClick();
+                toggleTheme();
+              }}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 hover:border-border transition-colors hover:bg-secondary/70 backdrop-blur-sm text-muted-foreground hover:text-foreground"
+              aria-label={`Switch theme`}
+              title="Toggle Theme"
+            >
+              {isGold ? (
+                <Moon aria-hidden="true" className="h-4 w-4 text-amber-500" />
+              ) : (
+                <Sun aria-hidden="true" className="h-4 w-4 text-cyan-400" />
+              )}
+            </button>
+
+            {/* Primary CTA */}
+            <a
+              href="#contact"
+              onClick={() => soundFx.playClick()}
+              className="hidden rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm hover:opacity-90 transition-all md:inline-flex"
+            >
+              Get in Touch
+            </a>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              type="button"
+              onClick={() => {
+                soundFx.playClick();
+                setIsMenuOpen((open) => !open);
+              }}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border transition-colors hover:bg-secondary md:hidden"
+              aria-expanded={isMenuOpen}
+              aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
+            >
+              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+        </nav>
+
+        {/* Mobile dropdown navigation */}
+        {isMenuOpen && (
+          <div className="border-t hairline bg-background/95 backdrop-blur-xl md:hidden animate-in slide-in-from-top-2 duration-200">
+            <ul className="section-wrap py-4 space-y-1">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={() => {
+                      soundFx.playClick();
+                      closeMenu();
+                    }}
+                    className="block py-2.5 text-sm font-medium text-foreground hover:text-primary transition-colors border-b border-border/40"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+              <li className="pt-3">
+                <a
+                  href="#contact"
+                  onClick={() => {
+                    soundFx.playClick();
+                    closeMenu();
+                  }}
+                  className="block w-full text-center py-2.5 rounded-lg bg-primary text-xs font-semibold text-primary-foreground shadow-sm"
+                >
+                  Get in Touch
+                </a>
+              </li>
+            </ul>
+          </div>
         )}
-      </AnimatePresence>
-    </motion.header>
+      </header>
+
+      {/* Command Palette Modal */}
+      <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
+    </>
   );
 };
 

@@ -1,133 +1,173 @@
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { Briefcase, Calendar, ChevronRight } from 'lucide-react';
-import { experience } from '@/data/portfolio';
+import { useState } from "react";
+import { Award, Briefcase, GraduationCap, Languages, MapPin, Sparkles, CheckCircle2, ChevronRight } from "lucide-react";
+import {
+  certifications,
+  education,
+  experience,
+  languages,
+} from "@/data/portfolio";
+import Tilt3DCard from "@/components/ui/Tilt3DCard";
+import { soundFx } from "@/lib/sound";
 
-const TimelineItem = ({ item, index, isLast }: { 
-  item: typeof experience[0]; 
-  index: number;
-  isLast: boolean;
-}) => {
-  const itemRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(itemRef, { once: true, margin: '-50px' });
-
-  const isEven = index % 2 === 0;
-
-  return (
-    <div ref={itemRef} className="relative">
-      {/* Timeline line */}
-      {!isLast && (
-        <motion.div
-          className="absolute left-1/2 top-16 w-px h-full -translate-x-1/2 bg-gradient-to-b from-primary to-muted hidden md:block"
-          initial={{ scaleY: 0 }}
-          animate={isInView ? { scaleY: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          style={{ transformOrigin: 'top' }}
-        />
-      )}
-
-      <div className={`flex flex-col md:flex-row items-center gap-8 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-        {/* Content Card */}
-        <motion.div
-          className="w-full md:w-5/12"
-          initial={{ opacity: 0, x: isEven ? -50 : 50 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6, delay: index * 0.2 }}
-        >
-          <div className="glass rounded-2xl p-6 hover:glow-sm transition-all duration-300 group">
-            <div className="flex items-center gap-2 text-primary mb-3">
-              <Calendar className="w-4 h-4" />
-              <span className="text-sm font-medium">{item.period}</span>
-            </div>
-            
-            <h3 className="text-xl font-bold mb-1 group-hover:text-primary transition-colors">
-              {item.role}
-            </h3>
-            
-            <p className="text-muted-foreground mb-4">{item.company}</p>
-            
-            <p className="text-sm text-muted-foreground mb-4">
-              {item.description}
-            </p>
-            
-            <ul className="space-y-2">
-              {item.highlights.map((highlight, i) => (
-                <motion.li
-                  key={i}
-                  className="flex items-center gap-2 text-sm"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.4 + i * 0.1 }}
-                >
-                  <ChevronRight className="w-4 h-4 text-primary" />
-                  {highlight}
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-        </motion.div>
-
-        {/* Center Icon */}
-        <motion.div
-          className="relative z-10 flex-shrink-0"
-          initial={{ scale: 0 }}
-          animate={isInView ? { scale: 1 } : {}}
-          transition={{ duration: 0.4, delay: 0.2 }}
-        >
-          <div className="w-12 h-12 rounded-full glass flex items-center justify-center glow">
-            <Briefcase className="w-5 h-5 text-primary" />
-          </div>
-        </motion.div>
-
-        {/* Spacer for alignment */}
-        <div className="hidden md:block w-5/12" />
-      </div>
-    </div>
-  );
-};
-
-const Timeline = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+export const Timeline = () => {
+  const [activeTab, setActiveTab] = useState<"experience" | "education">("experience");
 
   return (
-    <section id="experience" ref={sectionRef} className="py-32 relative">
-      <div className="container mx-auto px-6">
+    <section id="experience" aria-labelledby="experience-title" className="section-space scroll-mt-16">
+      <div className="section-wrap">
         {/* Section Header */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <motion.span
-            className="inline-block px-4 py-2 rounded-full glass text-sm font-medium text-primary mb-4"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.2 }}
-          >
-            Career Journey
-          </motion.span>
-          
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-            My <span className="gradient-text">Experience</span>
-          </h2>
-          
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            A timeline of my professional growth and achievements
-          </p>
-        </motion.div>
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Briefcase className="w-4 h-4 text-primary" />
+              <p className="eyebrow">Career & Credentials</p>
+            </div>
+            <h2 id="experience-title" className="editorial-heading font-semibold">
+              Track record of <span className="gradient-text">verifiable impact.</span>
+            </h2>
+            <p className="mt-2 text-base text-muted-foreground max-w-xl">
+              Proven hands-on engineering across municipal administrations, national telecom infrastructure, and competitive hackathons.
+            </p>
+          </div>
 
-        {/* Timeline */}
-        <div className="space-y-12 md:space-y-24">
-          {experience.map((item, index) => (
-            <TimelineItem
-              key={item.id}
-              item={item}
-              index={index}
-              isLast={index === experience.length - 1}
-            />
-          ))}
+          {/* Tab Selector */}
+          <div className="inline-flex items-center p-1 rounded-lg border border-border bg-card/60 backdrop-blur-sm">
+            <button
+              onClick={() => {
+                soundFx.playHover();
+                setActiveTab("experience");
+              }}
+              className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-md transition-all ${
+                activeTab === "experience"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Briefcase className="w-3.5 h-3.5" />
+              Experience
+            </button>
+            <button
+              onClick={() => {
+                soundFx.playHover();
+                setActiveTab("education");
+              }}
+              className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-md transition-all ${
+                activeTab === "education"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <GraduationCap className="w-3.5 h-3.5" />
+              Education & Honors
+            </button>
+          </div>
+        </div>
+
+        {/* Content Layout */}
+        <div className="grid gap-12 lg:grid-cols-[1.5fr_0.9fr] lg:gap-16">
+          {/* Left Column: Timeline Items */}
+          <div className="space-y-6">
+            {experience.map((item, index) => (
+              <Tilt3DCard key={item.id} maxTilt={4} glare={false}>
+                <article className="rounded-xl border border-border bg-card/85 p-6 sm:p-7 shadow-sm hover:border-primary/50 transition-all">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-full bg-secondary text-primary">
+                      {item.period}
+                    </span>
+                    <span className="text-xs font-medium px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                      {item.badge}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mt-2">
+                    <h3 className="text-lg font-bold text-foreground">{item.role}</h3>
+                    <span className="text-sm font-semibold text-primary">{item.company}</span>
+                  </div>
+
+                  <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <MapPin aria-hidden="true" className="h-3.5 w-3.5 text-muted-foreground" />
+                    {item.location}
+                  </p>
+
+                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+
+                  <ul className="mt-4 space-y-2 border-t border-border/50 pt-3">
+                    {item.highlights.map((highlight) => (
+                      <li key={highlight} className="flex gap-2.5 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                        <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500 mt-0.5" />
+                        <span>{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              </Tilt3DCard>
+            ))}
+          </div>
+
+          {/* Right Column: Education, Certifications & Accreditations */}
+          <aside className="space-y-6">
+            {/* Education Box */}
+            <div className="rounded-xl border border-border bg-card/85 p-6 shadow-sm">
+              <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wider mb-4 pb-2 border-b border-border/60">
+                <GraduationCap className="h-4 w-4" />
+                <span>Academic Degree</span>
+              </div>
+              <h4 className="text-base font-bold text-foreground">{education.degree}</h4>
+              <p className="mt-1 text-sm text-primary font-medium">{education.institution}</p>
+              <p className="mt-2 text-xs text-muted-foreground font-mono">{education.period}</p>
+              <div className="mt-4 flex flex-wrap gap-2 text-xs">
+                <span className="px-2.5 py-1 rounded bg-secondary font-medium">
+                  Cumulative GPA: <strong className="text-foreground">{education.gpa}</strong>
+                </span>
+                <span className="px-2.5 py-1 rounded bg-secondary font-medium">
+                  National Exit Exam: <strong className="text-foreground">{education.exitExam}</strong>
+                </span>
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Specialized in distributed architectures, database engines, and software engineering methodologies.
+              </p>
+            </div>
+
+            {/* Certifications Box */}
+            <div className="rounded-xl border border-border bg-card/85 p-6 shadow-sm">
+              <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wider mb-4 pb-2 border-b border-border/60">
+                <Award className="h-4 w-4" />
+                <span>Honors & Certifications</span>
+              </div>
+              <div className="space-y-4">
+                {certifications.map((cert) => (
+                  <div key={cert.title} className="text-xs space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-foreground">{cert.title}</span>
+                      <span className="font-mono text-[10px] text-muted-foreground px-1.5 py-0.5 rounded bg-secondary">
+                        {cert.year}
+                      </span>
+                    </div>
+                    <p className="text-primary font-medium text-[11px]">{cert.issuer}</p>
+                    <p className="text-muted-foreground leading-relaxed">{cert.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Languages Box */}
+            <div className="rounded-xl border border-border bg-card/85 p-6 shadow-sm">
+              <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-wider mb-4 pb-2 border-b border-border/60">
+                <Languages className="h-4 w-4" />
+                <span>Languages</span>
+              </div>
+              <div className="space-y-2.5">
+                {languages.map((lang) => (
+                  <div key={lang.name} className="flex justify-between items-center text-xs">
+                    <span className="font-semibold text-foreground">{lang.name}</span>
+                    <span className="text-muted-foreground font-mono text-[11px]">{lang.level}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </section>

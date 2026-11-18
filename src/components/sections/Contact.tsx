@@ -44,7 +44,7 @@ export const Contact = () => {
       <div className="section-wrap">
         <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           {/* Left Column: Contact Value Prop & Direct Channels */}
-          <div>
+          <div className="px-3">
             <div className="flex items-center gap-2 mb-3">
               <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <p className="eyebrow">Direct Contact</p>

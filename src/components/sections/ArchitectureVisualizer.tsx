@@ -143,7 +143,7 @@ export const ArchitectureVisualizer = () => {
       <div className="section-wrap relative z-10">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-          <div>
+          <div className='px-3'>
             <div className="flex items-center gap-2 mb-3">
               <Network className="w-4 h-4 text-primary" />
               <p className="eyebrow">Interactive Systems Architecture</p>

@@ -39,7 +39,7 @@ export const Skills = () => {
       <div className="section-wrap">
         {/* Header & Search */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-          <div>
+          <div className="px-3">
             <div className="flex items-center gap-2 mb-3">
               <Code2 className="w-4 h-4 text-primary" />
               <p className="eyebrow">Technical Mastery</p>

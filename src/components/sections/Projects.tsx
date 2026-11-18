@@ -34,7 +34,7 @@ export const Projects = () => {
       <div className="section-wrap">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
-          <div>
+          <div className="px-3">
             <div className="flex items-center gap-2 mb-3">
               <Layers className="w-4 h-4 text-primary" />
               <p className="eyebrow">Production Portfolio</p>

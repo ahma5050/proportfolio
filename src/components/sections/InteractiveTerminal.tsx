@@ -86,7 +86,7 @@ export const InteractiveTerminal = () => {
     <section id="terminal" aria-labelledby="terminal-title" className="section-space">
       <div className="section-wrap">
         <div className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-          <div>
+          <div className='px-3'>
             <div className="flex items-center gap-2 mb-3">
               <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <p className="eyebrow">Interactive Shell</p>
@@ -99,7 +99,7 @@ export const InteractiveTerminal = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-3">
             <button
               onClick={copyEmail}
               className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded-md border border-border bg-card/60 hover:border-primary transition-colors text-muted-foreground hover:text-foreground"
